@@ -39,12 +39,34 @@ class TestGetJson(TestCase):
     ])
     @patch('utils.requests.get')
     def test_get_json(self, test_url: str, test_payload: Dict,
-                      mock_requests_get: Mock):
+                      mocked_requests_get: Mock):
         """Test get_json function with a mocked HTTP request."""
         mock_response = Mock()
         mock_response.json.return_value = test_payload
-        mock_requests_get.return_value = mock_response
+        mocked_requests_get.return_value = mock_response
         get_json = __import__('utils').get_json
         res = get_json(test_url)
-        mock_requests_get.assert_called_once_with(test_url)
+        mocked_requests_get.assert_called_once_with(test_url)
         self.assertEqual(res, test_payload)
+
+
+class TestMemoize(TestCase):
+    """Test utils.memoize decorator."""
+    def test_memoize(self):
+        """Test memoize method."""
+        memoize = __import__('utils').memoize
+
+        class TestClass:
+            """Test Class"""
+            def a_method(self):
+                return 42
+
+            @memoize
+            def a_property(self):
+                return self.a_method()
+
+        with patch.object(TestClass, 'a_method', return_value=42) as mocked:
+            test_instance = TestClass()
+            self.assertEqual(test_instance.a_property, 42)
+            self.assertEqual(test_instance.a_property, 42)
+            mocked.assert_called_once()
