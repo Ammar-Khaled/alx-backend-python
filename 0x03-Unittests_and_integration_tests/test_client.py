@@ -76,11 +76,21 @@ class TestIntegrationGithubOrgClient(TestCase):
         """Integration Test for GithubOrgClient.public_repos."""
         client = GithubOrgClient('google')
         self.assertEqual(client.public_repos(), self.expected_repos)
+        self.assertEqual(client.org, self.org_payload)
+        self.assertEqual(client.repos_payload, self.repos_payload)
+        self.assertEqual(client.public_repos(), self.expected_repos)
+        self.assertEqual(client.public_repos("XLICENSE"), [])
+        self.mock.assert_called()
 
     def test_public_repos_with_license(self):
         """Test calling GithubOrgClient.public_repos(license)."""
         client = GithubOrgClient('google')
         self.assertEqual(client.public_repos('apache-2.0'), self.apache2_repos)
+        self.assertEqual(client.public_repos(), self.expected_repos)
+        self.assertEqual(client.public_repos("XLICENSE"), [])
+        self.assertEqual(client.public_repos(
+            "apache-2.0"), self.apache2_repos)
+        self.mock.assert_called()
 
     @classmethod
     def tearDownClass(cls) -> None:
