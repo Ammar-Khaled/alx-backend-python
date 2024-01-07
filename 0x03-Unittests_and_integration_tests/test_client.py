@@ -69,12 +69,10 @@ class TestIntegrationGithubOrgClient(TestCase):
         """Set up the class before tests."""
         cls.get_patcher = patch('requests.get')
         cls.mocked_get = cls.get_patcher.start()
-
-        mocked_response = MagicMock()
-        mocked_response.json.side_effect = [cls.org_payload, cls.repos_payload,
-                                            cls.org_payload, cls.repos_payload]
-
-        cls.mocked_get.return_value = mocked_response
+        cls.mocked_get.return_value.json.side_effect = [cls.org_payload,
+                                                        cls.repos_payload,
+                                                        cls.org_payload,
+                                                        cls.repos_payload]
 
     def test_public_repos(self):
         """Integration Test for GithubOrgClient.public_repos."""
