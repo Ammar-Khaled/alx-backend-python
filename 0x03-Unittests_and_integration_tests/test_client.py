@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """Test client.py functions."""
 from parameterized import parameterized, parameterized_class
-from unittest import TestCase
+import unittest
 from unittest.mock import MagicMock, patch, PropertyMock
 from client import GithubOrgClient
 from fixtures import TEST_PAYLOAD
 from requests import HTTPError
 
 
-class TestGithubOrgClient(TestCase):
+class TestGithubOrgClient(unittest.TestCase):
     """Test GithubOrgClient class."""
     @parameterized.expand([
         ("google"),
@@ -59,7 +59,7 @@ class TestGithubOrgClient(TestCase):
     ("org_payload", "repos_payload", "expected_repos", "apache2_repos"),
     TEST_PAYLOAD
 )
-class TestIntegrationGithubOrgClient(TestCase):
+class TestIntegrationGithubOrgClient(unittest.TestCase):
     """Integration Test for client.GithubOrgClient class."""
     @classmethod
     def setUpClass(cls) -> None:
